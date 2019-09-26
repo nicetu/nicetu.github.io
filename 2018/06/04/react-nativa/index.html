@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="React Nativa,源码解析,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在 React Native 的开发中，对源码的熟悉有利于我们快速的理解 React Native 构建原理，有助于我们快速的定位 Bug 和完成开发需求。在此，对于 React Native 的 Android 部分源码进行阅读。">
+<meta name="keywords" content="React Nativa,源码解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Nativa 源码解析">
+<meta property="og:url" content="http://yoursite.com/2018/06/04/react-nativa/index.html">
+<meta property="og:site_name" content="tuchaofu">
+<meta property="og:description" content="在 React Native 的开发中，对源码的熟悉有利于我们快速的理解 React Native 构建原理，有助于我们快速的定位 Bug 和完成开发需求。在此，对于 React Native 的 Android 部分源码进行阅读。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-26T03:31:48.116Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Nativa 源码解析">
+<meta name="twitter:description" content="在 React Native 的开发中，对源码的熟悉有利于我们快速的理解 React Native 构建原理，有助于我们快速的定位 Bug 和完成开发需求。在此，对于 React Native 的 Android 部分源码进行阅读。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/04/react-nativa/">
+
+
+
+
+
+  <title>React Nativa 源码解析 | tuchaofu</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">tuchaofu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">tuchaofu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/04/react-nativa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tuchaofu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tuchaofu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React Nativa 源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-04T10:16:38+08:00">
+                2018-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React-Native/" itemprop="url" rel="index">
+                    <span itemprop="name">React Native</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在 <a href="https://facebook.github.io/react-native/docs/getting-started.html" target="_blank" rel="noopener">React Native</a> 的开发中，对源码的熟悉有利于我们快速的理解 React Native 构建原理，有助于我们快速的定位 Bug 和完成开发需求。在此，对于 React Native 的 Android 部分源码进行阅读。<br><a id="more"></a></p>
+<h1 id="ReactInstanceManager-初始化"><a href="#ReactInstanceManager-初始化" class="headerlink" title="ReactInstanceManager 初始化"></a>ReactInstanceManager 初始化</h1><p>根据 <a href="https://facebook.github.io/react-native/" target="_blank" rel="noopener">React Native 官网</a> 新建的工程。我们可以看到在 MainApplication.class 中继承接口 ReactApplication.class 实现了 getReactNativeHost 方法。从而获取了 ReactNativeHost.class 实例化对象。</p>
+<h2 id="ReactApplication-class"><a href="#ReactApplication-class" class="headerlink" title="ReactApplication.class"></a>ReactApplication.class</h2><p>接口定义 getReactNativeHost 方法，返回 ReactNativeHost。源码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReactApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Get the default &#123;<span class="doctag">@link</span> ReactNativeHost&#125; for this app.</span></span><br><span class="line"><span class="comment">   * 为当前 APP 获取默认的 ReactNativeHost 对象</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="MainApplication-class"><a href="#MainApplication-class" class="headerlink" title="MainApplication.class"></a>MainApplication.class</h2><p>继承 ReactApplication.class 接口，实现 getReactNativeHost() 方法。并且定义了<br>ReactNativeHost 为私有的成员对象。MainApplication.class 实现源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> <span class="keyword">implements</span> <span class="title">ReactApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReactNativeHost mReactNativeHost = <span class="keyword">new</span> ReactNativeHost(<span class="keyword">this</span>) &#123;</span><br><span class="line">    <span class="comment">// true 为开启调试模式</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">getUseDeveloperSupport</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> BuildConfig.DEBUG;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 获取 ReactPackage 集合</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> List&lt;ReactPackage&gt; <span class="title">getPackages</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> Arrays.&lt;ReactPackage&gt;asList(</span><br><span class="line">          <span class="keyword">new</span> MainReactPackage()</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获取 JSMainModule 的名称</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">getJSMainModuleName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"index"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">//获取 mReactNativeHost</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mReactNativeHost;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate();</span><br><span class="line">    <span class="comment">//SoLoader：加载C++底层库，准备解析JS。</span></span><br><span class="line">    SoLoader.init(<span class="keyword">this</span>, <span class="comment">/* native exopackage */</span> <span class="keyword">false</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReactNativeHost-class"><a href="#ReactNativeHost-class" class="headerlink" title="ReactNativeHost.class"></a>ReactNativeHost.class</h2><p>由此我们继续看 ReactNativeHost.class 源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ReactNativeHost 为 ReactInstanceManager 的单例模式</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ReactNativeHost</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Application mApplication;</span><br><span class="line">  <span class="keyword">private</span> <span class="meta">@Nullable</span> ReactInstanceManager mReactInstanceManager;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="title">ReactNativeHost</span><span class="params">(Application application)</span> </span>&#123;</span><br><span class="line">    mApplication = application;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 获取 ReactInstanceManager 实例化对象</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mReactInstanceManager == <span class="keyword">null</span>) &#123;</span><br><span class="line">      ReactMarker.logMarker(ReactMarkerConstants.GET_REACT_INSTANCE_MANAGER_START);</span><br><span class="line">      mReactInstanceManager = createReactInstanceManager();</span><br><span class="line">      ReactMarker.logMarker(ReactMarkerConstants.GET_REACT_INSTANCE_MANAGER_END);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mReactInstanceManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 返回当前 mReactInstanceManager 是否已实例化.如果</span></span><br><span class="line"><span class="comment">   * &#123;<span class="doctag">@link</span> #getReactInstanceManager()&#125; 被调用的化，此处返回为 true,</span></span><br><span class="line"><span class="comment">   * or &#123;<span class="doctag">@link</span> #clear()&#125; 被调用的化，此处返回为 false</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mReactInstanceManager != <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 销毁当前 mReactInstanceManager ，释放关联资源；</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mReactInstanceManager != <span class="keyword">null</span>) &#123;</span><br><span class="line">      mReactInstanceManager.destroy();</span><br><span class="line">      mReactInstanceManager = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 实例化 ReactInstanceManager 设置相关参数；</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> ReactInstanceManager <span class="title">createReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ReactMarker.logMarker(ReactMarkerConstants.BUILD_REACT_INSTANCE_MANAGER_START);</span><br><span class="line">    ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()</span><br><span class="line">      .setApplication(mApplication)</span><br><span class="line">      .setJSMainModulePath(getJSMainModuleName())</span><br><span class="line">      .setUseDeveloperSupport(getUseDeveloperSupport())</span><br><span class="line">      .setRedBoxHandler(getRedBoxHandler())</span><br><span class="line">      .setJavaScriptExecutorFactory(getJavaScriptExecutorFactory())</span><br><span class="line">      .setUIImplementationProvider(getUIImplementationProvider())</span><br><span class="line">      .setJSIModulesProvider(getJSIModulesProvider())</span><br><span class="line">      .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (ReactPackage reactPackage : getPackages()) &#123;</span><br><span class="line">      builder.addPackage(reactPackage);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    String jsBundleFile = getJSBundleFile();</span><br><span class="line">    <span class="keyword">if</span> (jsBundleFile != <span class="keyword">null</span>) &#123;</span><br><span class="line">      builder.setJSBundleFile(jsBundleFile);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      builder.setBundleAssetName(Assertions.assertNotNull(getBundleAssetName()));</span><br><span class="line">    &#125;</span><br><span class="line">    ReactInstanceManager reactInstanceManager = builder.build();</span><br><span class="line">    ReactMarker.logMarker(ReactMarkerConstants.BUILD_REACT_INSTANCE_MANAGER_END);</span><br><span class="line">    <span class="keyword">return</span> reactInstanceManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 获取 RedBoxHandler 去发送 RedBox-related callbacks</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">RedBoxHandler <span class="title">getRedBoxHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 重写该方法使用 custom 执行；</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">JavaScriptExecutorFactory <span class="title">getJavaScriptExecutorFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> Application <span class="title">getApplication</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mApplication;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Get the &#123;<span class="doctag">@link</span> UIImplementationProvider&#125; to use. Override this method if you want to use a</span></span><br><span class="line"><span class="comment">   * custom UI implementation.</span></span><br><span class="line"><span class="comment">   * 获取 UIImplementationProvider，重写此方法，使用客户 UI 接口；</span></span><br><span class="line"><span class="comment">   * Note: this is very advanced functionality, in 99% of cases you don't need to override this.</span></span><br><span class="line"><span class="comment">   * 此处为比较先进的方法，很多情况下是不需要被重写的；</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> UIImplementationProvider <span class="title">getUIImplementationProvider</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> UIImplementationProvider();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span></span><br><span class="line">  <span class="function">JSIModulesProvider <span class="title">getJSIModulesProvider</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 返回 the main module 的文件名。dev 模式开启条件下，从 the packager server 获取 Js bundle 资源，</span></span><br><span class="line"><span class="comment">   * ReactInstanceManager 一旦被创建，这个文件最先执行；</span></span><br><span class="line"><span class="comment">   * e.g. "index.android"</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> String <span class="title">getJSMainModuleName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"index.android"</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 返回用户自定义的 bundle file文件路径如下，默认是加载Android 工程目录 assets 下的 bundle file文件。</span></span><br><span class="line"><span class="comment">   * e.g. "file://sdcard/myapp_cache/index.android.bundle"</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">String <span class="title">getJSBundleFile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * e.g. "index.android.bundle"</span></span><br><span class="line"><span class="comment">   * 默认是返回 Android 工程目录 assets 下的 文件名为 index.android.bundle 的 Jsbundle 文件，如果其为空，并且</span></span><br><span class="line"><span class="comment">   * 设置的 Jsbundle 的文件路径不存在，那么当前应用只在 &#123;<span class="doctag">@code</span> getUseDeveloperSupport&#125; 为true， the packager </span></span><br><span class="line"><span class="comment">   * server 开启的情况下运行</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">String <span class="title">getBundleAssetName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"index.android.bundle"</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   *是否开启 dev 模式，ture 为 dev 模式</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">getUseDeveloperSupport</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 返回 ReactPackage 的集合，常返回的集合中至少包括有 MainReactPackage </span></span><br><span class="line"><span class="comment">   * 你也可以参考官网添加需要的 ReactPackage。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> List&lt;ReactPackage&gt; <span class="title">getPackages</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReactInstanceManager-class"><a href="#ReactInstanceManager-class" class="headerlink" title="ReactInstanceManager.class"></a>ReactInstanceManager.class</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ReactInstanceManager 管理 CatalystInstance 实例，提供方法配置 catalyst 实例通过使用 ReactPackage，跟踪其生命周期。建立 instance 和 developers 的链接，支持 framework 的功能。</span></span><br><span class="line"><span class="comment"> * 实例管理通过 ReactRootView 启动 JS application；</span></span><br><span class="line"><span class="comment"> * ReactInstanceManager 的生命周期应该和 ReactRootView 所属的 activity 一致。通过当前实例的 (see &#123;<span class="doctag">@link</span></span></span><br><span class="line"><span class="comment"> *  #onHostPause&#125;,&#123;<span class="doctag">@link</span> onHostDestroy&#125; and &#123;<span class="doctag">@link</span> #onHostResume&#125;)和 activity 的 lifecycle events 对应一致；</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ThreadSafe</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReactInstanceManager</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 通过 builder 创建一个可设置的 ReactInstanceManager 实例</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ReactInstanceManagerBuilder <span class="title">builder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ReactInstanceManagerBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="ReactActivity-的实现"><a href="#ReactActivity-的实现" class="headerlink" title="ReactActivity 的实现"></a>ReactActivity 的实现</h1><h2 id="MainActivity-class"><a href="#MainActivity-class" class="headerlink" title="MainActivity.class"></a>MainActivity.class</h2><p>MainActivity 继承 ReactActivity 实现 getMainComponentName() 方法，获取 MainComponent 的组件名。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">ReactActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回 JavaScript 注册的 Main component 的yin</span></span><br><span class="line"><span class="comment">     * 这用于调度组件的呈现。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">getMainComponentName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"rndemo"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReactActivity-class"><a href="#ReactActivity-class" class="headerlink" title="ReactActivity.class"></a>ReactActivity.class</h2><p>ReactActivityDelegate 代理实现 Activity 对应的功能。ReactActivity 设置相关的什么周期配置，物理返回处理，权限处理回调等逻辑处理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * React Native 应用的基类 Activity</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ReactActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">DefaultHardwareBackBtnHandler</span>, <span class="title">PermissionAwareActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReactActivityDelegate mDelegate;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="title">ReactActivity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mDelegate = createReactActivityDelegate();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 返回 JavaScript 注册的 Main component 的yin</span></span><br><span class="line"><span class="comment">    * 这用于调度组件的呈现。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">String <span class="title">getMainComponentName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 构建时候调用, 重写的化可自定义 custom delegate implementation.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> ReactActivityDelegate <span class="title">createReactActivityDelegate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ReactActivityDelegate(<span class="keyword">this</span>, getMainComponentName());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    mDelegate.onCreate(savedInstanceState);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onPause();</span><br><span class="line">    mDelegate.onPause();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onResume();</span><br><span class="line">    mDelegate.onResume();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onDestroy();</span><br><span class="line">    mDelegate.onDestroy();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</span><br><span class="line">    mDelegate.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyDown</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mDelegate.onKeyDown(keyCode, event) || <span class="keyword">super</span>.onKeyDown(keyCode, event);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyUp</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mDelegate.onKeyUp(keyCode, event) || <span class="keyword">super</span>.onKeyUp(keyCode, event);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyLongPress</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mDelegate.onKeyLongPress(keyCode, event) || <span class="keyword">super</span>.onKeyLongPress(keyCode, event);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBackPressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!mDelegate.onBackPressed()) &#123;</span><br><span class="line">      <span class="keyword">super</span>.onBackPressed();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invokeDefaultOnBackPressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onBackPressed();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNewIntent</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!mDelegate.onNewIntent(intent)) &#123;</span><br><span class="line">      <span class="keyword">super</span>.onNewIntent(intent);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestPermissions</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    String[] permissions,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">    PermissionListener listener)</span> </span>&#123;</span><br><span class="line">    mDelegate.requestPermissions(permissions, requestCode, listener);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRequestPermissionsResult</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">    String[] permissions,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span>[] grantResults)</span> </span>&#123;</span><br><span class="line">    mDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mDelegate.getReactNativeHost();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mDelegate.getReactInstanceManager();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">loadApp</span><span class="params">(String appKey)</span> </span>&#123;</span><br><span class="line">    mDelegate.loadApp(appKey);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReactActivityDelegate-class"><a href="#ReactActivityDelegate-class" class="headerlink" title="ReactActivityDelegate.class"></a>ReactActivityDelegate.class</h2> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 为 ReactActivity 和 ReactFragmentActivity 的代理类。如果 Application 没有实现接口 ReactApplication 的话，子类需要提供接口 ReactApplication 实现  getReactNativeHost()方法。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReactActivityDelegate</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="meta">@Nullable</span> Activity mActivity;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="meta">@Nullable</span> FragmentActivity mFragmentActivity;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="meta">@Nullable</span> String mMainComponentName;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="meta">@Nullable</span> ReactRootView mReactRootView;</span><br><span class="line">  <span class="keyword">private</span> <span class="meta">@Nullable</span> DoubleTapReloadRecognizer mDoubleTapReloadRecognizer;</span><br><span class="line">  <span class="keyword">private</span> <span class="meta">@Nullable</span> PermissionListener mPermissionListener;</span><br><span class="line">  <span class="keyword">private</span> <span class="meta">@Nullable</span> Callback mPermissionsCallback;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">Bundle <span class="title">getLaunchOptions</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> ReactRootView <span class="title">createRootView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ReactRootView(getContext());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 获取默认的 ReactNativeHost 实例, 通过 MainApplication 中实现的 getReactNativeHost 的方法；</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ((ReactApplication) getPlainActivity().getApplication()).getReactNativeHost();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> getReactNativeHost().getReactInstanceManager();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//入口</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mMainComponentName != <span class="keyword">null</span>) &#123;</span><br><span class="line">      loadApp(mMainComponentName);</span><br><span class="line">    &#125;</span><br><span class="line">    mDoubleTapReloadRecognizer = <span class="keyword">new</span> DoubleTapReloadRecognizer();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//启动 js application</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadApp</span><span class="params">(String appKey)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mReactRootView != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot loadApp while app is already running."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    mReactRootView = createRootView();</span><br><span class="line">    mReactRootView.startReactApplication(</span><br><span class="line">      getReactNativeHost().getReactInstanceManager(),</span><br><span class="line">      appKey,</span><br><span class="line">      getLaunchOptions());</span><br><span class="line">    getPlainActivity().setContentView(mReactRootView);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ReactRootView-class"><a href="#ReactRootView-class" class="headerlink" title="ReactRootView.class"></a>ReactRootView.class</h2> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ReactRootView 是 catalyst apps 默认的根视图。提供 UI 视图尺寸变化的监听，手势处理，输入键盘处理，启动 Js Applicationd 的方法等。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReactRootView</span> <span class="keyword">extends</span> <span class="title">SizeMonitoringFrameLayout</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">RootView</span>, <span class="title">MeasureSpecProvider</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * &#123;<span class="doctag">@see</span> #startReactApplication(ReactInstanceManager, String, android.os.Bundle)&#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(ReactInstanceManager reactInstanceManager, String moduleName)</span> </span>&#123;</span><br><span class="line">    startReactApplication(reactInstanceManager, moduleName, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Schedule rendering of the react component rendered by the JS application from the given JS</span></span><br><span class="line"><span class="comment">   * module (@&#123;param moduleName&#125;) using provided &#123;<span class="doctag">@param</span> reactInstanceManager&#125; to attach to the</span></span><br><span class="line"><span class="comment">   * JS context of that manager. Extra parameter &#123;<span class="doctag">@param</span> launchOptions&#125; can be used to pass initial</span></span><br><span class="line"><span class="comment">   * properties for the react component.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">      ReactInstanceManager reactInstanceManager,</span></span></span><br><span class="line"><span class="function"><span class="params">      String moduleName,</span></span></span><br><span class="line"><span class="function"><span class="params">      @Nullable Bundle initialProperties)</span> </span>&#123;</span><br><span class="line">    Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, <span class="string">"startReactApplication"</span>);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      UiThreadUtil.assertOnUiThread();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// TODO(6788889): Use POJO instead of bundle here, apparently we can't just use WritableMap</span></span><br><span class="line">      <span class="comment">// here as it may be deallocated in native after passing via JNI bridge, but we want to reuse</span></span><br><span class="line">      <span class="comment">// it in the case of re-creating the catalyst instance</span></span><br><span class="line">      Assertions.assertCondition(</span><br><span class="line">        mReactInstanceManager == <span class="keyword">null</span>,</span><br><span class="line">        <span class="string">"This root view has already been attached to a catalyst instance manager"</span>);</span><br><span class="line"></span><br><span class="line">      mReactInstanceManager = reactInstanceManager;</span><br><span class="line">      mJSModuleName = moduleName;</span><br><span class="line">      mAppProperties = initialProperties;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!mReactInstanceManager.hasStartedCreatingInitialContext()) &#123;</span><br><span class="line">        mReactInstanceManager.createReactContextInBackground();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      attachToReactInstanceManager();</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Android 部分实现 React Native 的接入，我们的落脚点在 ReactRootView 的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(ReactInstanceManager reactInstanceManager, String moduleName)</span> </span>&#123;</span><br><span class="line">    startReactApplication(reactInstanceManager, moduleName, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(ReactInstanceManager reactInstanceManager,String moduleName,</span></span></span><br><span class="line"><span class="function"><span class="params">      @Nullable Bundle initialProperties)</span> </span>&#123;</span><br><span class="line">          ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法。在此需要实现 ReactRootView，ReactInstanceManager。然后通过 setContentView(ReactRootView) 渲染出来。如需传参数可加 initialProperties，具体可参考上篇文章。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>文有所思，读有所益，快哉！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="tuchaofu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React-Nativa/" rel="tag"># React Nativa</a>
+          
+            <a href="/tags/源码解析/" rel="tag"># 源码解析</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/03/react-native-常用的通信方式/" rel="next" title="React Native 常用的通信方式">
+                <i class="fa fa-chevron-left"></i> React Native 常用的通信方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/08/Android-权限大全/" rel="prev" title="Android 权限大全">
+                Android 权限大全 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjkxOS8xMzQ1NQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.png" alt="tuchaofu">
+            
+              <p class="site-author-name" itemprop="name">tuchaofu</p>
+              <p class="site-description motion-element" itemprop="description">干一行，爱一行，专一行！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nicetu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ReactInstanceManager-初始化"><span class="nav-number">1.</span> <span class="nav-text">ReactInstanceManager 初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactApplication-class"><span class="nav-number">1.1.</span> <span class="nav-text">ReactApplication.class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MainApplication-class"><span class="nav-number">1.2.</span> <span class="nav-text">MainApplication.class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactNativeHost-class"><span class="nav-number">1.3.</span> <span class="nav-text">ReactNativeHost.class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactInstanceManager-class"><span class="nav-number">1.4.</span> <span class="nav-text">ReactInstanceManager.class</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ReactActivity-的实现"><span class="nav-number">2.</span> <span class="nav-text">ReactActivity 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MainActivity-class"><span class="nav-number">2.1.</span> <span class="nav-text">MainActivity.class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactActivity-class"><span class="nav-number">2.2.</span> <span class="nav-text">ReactActivity.class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactActivityDelegate-class"><span class="nav-number">2.3.</span> <span class="nav-text">ReactActivityDelegate.class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactRootView-class"><span class="nav-number">2.4.</span> <span class="nav-text">ReactRootView.class</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tuchaofu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

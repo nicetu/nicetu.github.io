@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android permission,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="总结下 Android 中使用的权限，便于快速查找和使用。  permissiongroup只是一个逻辑分组，作用也只有显示应用程序权限给用户看的。实际在权限的使用中用 permission 。">
+<meta name="keywords" content="Android permission">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 权限大全">
+<meta property="og:url" content="http://yoursite.com/2018/06/08/Android-权限大全/index.html">
+<meta property="og:site_name" content="tuchaofu">
+<meta property="og:description" content="总结下 Android 中使用的权限，便于快速查找和使用。  permissiongroup只是一个逻辑分组，作用也只有显示应用程序权限给用户看的。实际在权限的使用中用 permission 。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-26T03:32:09.311Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 权限大全">
+<meta name="twitter:description" content="总结下 Android 中使用的权限，便于快速查找和使用。  permissiongroup只是一个逻辑分组，作用也只有显示应用程序权限给用户看的。实际在权限的使用中用 permission 。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/08/Android-权限大全/">
+
+
+
+
+
+  <title>Android 权限大全 | tuchaofu</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">tuchaofu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">tuchaofu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/08/Android-权限大全/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tuchaofu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tuchaofu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 权限大全</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-08T10:32:58+08:00">
+                2018-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>总结下 Android 中使用的权限，便于快速查找和使用。  permissiongroup只是一个逻辑分组，作用也只有显示应用程序权限给用户看的。实际在权限的使用中用 permission 。</p>
+<a id="more"></a>
+<h1 id="permission-group"><a href="#permission-group" class="headerlink" title="permission_group"></a><a href="http://www.zhdoc.net/android/reference/android/Manifest.permission_group.html" target="_blank" rel="noopener">permission_group</a></h1><table>
+<thead>
+<tr>
+<th>type</th>
+<th>group_name</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String</td>
+<td>CALENDAR</td>
+<td>Used for runtime permissions related to user’s calendar. 用户日历相关的运行时权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>CAMERA</td>
+<td>Used for permissions that are associated with accessing camera or capturing images/video from the device. 访问照相机或从设备捕获图像/视频相关的权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>CONTACTS</td>
+<td>Used for runtime permissions related to contacts and profiles on this device. 设备上的联系人和个人资料相关的运行时权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>LOCATION</td>
+<td>Used for permissions that allow accessing the device location. 允许访问设备位置定位信息的权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>MICROPHONE</td>
+<td>Used for permissions that are associated with accessing microphone audio from the device. 从设备的麦克风访问音频数据的相关权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>PHONE</td>
+<td>Used for permissions that are associated telephony features. 与电话功能相关的权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>SENSORS</td>
+<td>Used for permissions that are associated with accessing camera or capturing images/video from the device. 访问照相机或从设备捕获图像/视频相关的权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>SMS</td>
+<td>Used for runtime permissions related to user’s SMS messages. 用户SMS短消息相关的运行时权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>STORAGE</td>
+<td>Used for runtime permissions related to the shared external storage. 共享外部存储相关的运行时权限。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="permission"><a href="#permission" class="headerlink" title="permission"></a><a href="http://www.zhdoc.net/android/reference/android/Manifest.permission.html" target="_blank" rel="noopener">permission</a></h1><p>ps: 使用：”android.permission.name”</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>name</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String</td>
+<td>ACCESS_CHECKIN_PROPERTIES</td>
+<td>Allows read/write access to the “properties” table in the checkin database, to change values that get uploaded. 允许读写访问在checkin数据库中的“properties”表，修改值并上传。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCESS_COARSE_LOCATION</td>
+<td>Allows an app to access approximate location. 允许应用程序获取粗略的位置定位。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCESS_FINE_LOCATION</td>
+<td>Allows an app to access precise location. 允许应用程序获取精确的位置定位。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCESS_LOCATION_EXTRA_COMMANDS</td>
+<td>Allows an application to access extra location provider commands. 允许应用程序访问额外的位置定位提供者命令。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCESS_NETWORK_STATE</td>
+<td>Allows applications to access information about networks. 允许应用程序访问有关网络的信息</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCESS_NOTIFICATION_POLICY</td>
+<td>Marker permission for applications that wish to access notification policy. 对希望访问通知策略的应用程序的标记权限。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCESS_WIFI_STATE</td>
+<td>Allows applications to access information about Wi-Fi networks. 允许应用程序访问有关Wi-Fi网络的信息。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ACCOUNT_MANAGER</td>
+<td>allows applications to call into AccountAuthenticators. 允许应用程序调用AccountAuthenticators。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ADD_VOICEMAIL</td>
+<td>Allows an application to add voicemails into the system. 允许应用程序添加语音信箱到系统中。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>ALLOCATE_AGGRESSIVE</td>
+<td>Allows an application to aggressively allocate disk space. 允许应用程序积极地分配磁盘空间。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>BATTERY_STATS</td>
+<td>Allows an application to collect battery statistics 允许应用程序收集电池状态。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>BIND_ACCESSIBILITY_SERVICE</td>
+<td>Must be required by an AccessibilityService, to ensure that only the system can bind to it. 必须由AccessibilityService来发起请求，确保只有系统可以对它绑定。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>BIND_APPWIDGET</td>
+<td>Allows an application to tell the AppWidget service which application can access AppWidget’s data. 允许应用程序告诉Appwidget service，其可以访问Appwidget数据。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>BIND_AUTO_FILL</td>
+<td>Must be required by a AutoFillService, to ensure that only the system can bind to it. 必须由AutoFillService来发起请求，确保只有系统可以对它绑定。</td>
+</tr>
+</tbody>
+</table>
+<p>String    BIND_CARRIER_MESSAGING_SERVICE This constant was deprecated in API level 23. Use BIND_CARRIER_SERVICES instead.<br>此常量在API level 23版本中被取消。用 BIND_CARRIER_SERVICES来代替</p>
+<p>String    BIND_CARRIER_SERVICES<br>The system process that is allowed to bind to services in carrier apps will have this permission.<br>拥有此权限，则系统进程被允许绑定到载体应用程序中的service。</p>
+<p>String    BIND_CHOOSER_TARGET_SERVICE<br>Must be required by a ChooserTargetService, to ensure that only the system can bind to it.<br>必须由ChooserTargetService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_CONDITION_PROVIDER_SERVICE<br>Must be required by a ConditionProviderService, to ensure that only the system can bind to it.<br>必须由ConditionProviderService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_DEVICE_ADMIN<br>Must be required by device administration receiver, to ensure that only the system can interact with it.<br>必须由设备管理接收器（device administration receviver）来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_DREAM_SERVICE<br>Must be required by an DreamService, to ensure that only the system can bind to it.<br>必须由DreamService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_INCALL_SERVICE<br>Must be required by a InCallService, to ensure that only the system can bind to it.<br>必须由InCallService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_INPUT_METHOD<br>Must be required by an InputMethodService, to ensure that only the system can bind to it.<br>必须由InputMethodService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_MIDI_DEVICE_SERVICE<br>Must be required by an MidiDeviceService, to ensure that only the system can bind to it.<br>必须由MidiDeviceService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_NFC_SERVICE<br>Must be required by a HostApduService or OffHostApduService to ensure that only the system can bind to it.<br>必须由HostApduService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_NOTIFICATION_LISTENER_SERVICE<br>Must be required by an NotificationListenerService, to ensure that only the system can bind to it.<br>必须由NotificationListenerService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_PRINT_SERVICE<br>Must be required by a PrintService, to ensure that only the system can bind to it.<br>必须由PrintService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_QUICK_SETTINGS_TILE<br>Allows an application to bind to third party quick settings tiles.<br>允许应用程序绑定到第三方的快速设置（quick setting tile）。</p>
+<p>String    BIND_REMOTEVIEWS<br>Must be required by a RemoteViewsService, to ensure that only the system can bind to it.<br>必须由RemoteViewsService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_SCREENING_SERVICE<br>Must be required by a CallScreeningService, to ensure that only the system can bind to it.<br>必须由CallScreeningService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_TELECOM_CONNECTION_SERVICE<br>Must be required by a ConnectionService, to ensure that only the system can bind to it.<br>必须由ConnectionService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_TEXT_SERVICE<br>Must be required by a TextService (e.g.<br>必须由TextService发起请求。</p>
+<p>String    BIND_TV_INPUT<br>Must be required by a TvInputService to ensure that only the system can bind to it.<br>必须由TvInputService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_VISUAL_VOICEMAIL_SERVICE<br>Must be required by a link VisualVoicemailService to ensure that only the system can bind to it.<br>必须由VisualVoicemailService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_VOICE_INTERACTION<br>Must be required by a VoiceInteractionService, to ensure that only the system can bind to it.<br>必须由VoiceInteractionService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_VPN_SERVICE<br>Must be required by a VpnService, to ensure that only the system can bind to it.<br>必须由VpnService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_VR_LISTENER_SERVICE<br>Must be required by an VrListenerService, to ensure that only the system can bind to it.<br>必须由VrListenerService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BIND_WALLPAPER<br>Must be required by a WallpaperService, to ensure that only the system can bind to it.<br>必须由WallpaperService来发起请求，确保只有系统可以对它绑定。</p>
+<p>String    BLUETOOTH<br>Allows applications to connect to paired bluetooth devices.<br>允许应用程序连接已配对的蓝牙设备。</p>
+<p>String    BLUETOOTH_ADMIN<br>Allows applications to discover and pair bluetooth devices.<br>允许应用程序发现和配对蓝牙设备。</p>
+<p>String    BLUETOOTH_PRIVILEGED<br>Allows applications to pair bluetooth devices without user interaction, and to allow or disallow phonebook access or message access.<br>允许应用程序在没有用户交互的情况下对蓝牙设备进行配对, 并允许或禁止访问电话簿或短消息。</p>
+<p>String    BODY_SENSORS<br>Allows an application to access data from sensors that the user uses to measure what is happening inside his/her body, such as heart rate.<br>允许应用程序从传感器访问数据，此传感器是用户测量其身体状态的, 如心率。</p>
+<p>String    BROADCAST_PACKAGE_REMOVED<br>Allows an application to broadcast a notification that an application package has been removed.<br>删除应用程序包后，允许应用程序广播一个通知。</p>
+<p>String    BROADCAST_SMS<br>Allows an application to broadcast an SMS receipt notification.<br>收到SMS短消息后，允许应用程序广播一个通知。</p>
+<p>String    BROADCAST_STICKY<br>Allows an application to broadcast sticky intents.<br>允许应用程序广播sticky intents。</p>
+<p>String    BROADCAST_WAP_PUSH<br>Allows an application to broadcast a WAP PUSH receipt notification.<br>收到WAP，PUSH消息后，允许应用程序广播通知。</p>
+<p>String    CALL_PHONE<br>Allows an application to initiate a phone call without going through the Dialer user interface for the user to confirm the call.<br>允许应用程序在不通过拨号界面的情况下启动电话呼叫, 并且能由用户确认呼叫。</p>
+<p>String    CALL_PRIVILEGED<br>Allows an application to call any phone number, including emergency numbers, without going through the Dialer user interface for the user to confirm the call being placed.<br>允许应用程序呼叫任何电话号码 (包括紧急号码), 而无需通过拨号界面, 并且能由用户确认呼叫。</p>
+<p>String    CAMERA<br>Required to be able to access the camera device.<br>请求访问照相机设备。</p>
+<p>String    CAPTURE_AUDIO_OUTPUT<br>Allows an application to capture audio output.<br>允许应用程序截获音频输出。</p>
+<p>String    CAPTURE_SECURE_VIDEO_OUTPUT<br>Allows an application to capture secure video output.<br>允许应用程序截获安全的视频输出。</p>
+<p>String    CAPTURE_VIDEO_OUTPUT<br>Allows an application to capture video output.<br>允许应用程序截获视频输出。</p>
+<p>String    CHANGE_COMPONENT_ENABLED_STATE<br>Allows an application to change whether an application component (other than its own) is enabled or not.<br>允许应用程序改变是否使能或静止其他应用程序的组件。</p>
+<p>String    CHANGE_CONFIGURATION<br>Allows an application to modify the current configuration, such as locale.<br>允许应用程序修改当前配置 (如区域设置)。</p>
+<p>String    CHANGE_NETWORK_STATE<br>Allows applications to change network connectivity state.<br>允许应用程序改变网络连接状态。</p>
+<p>String    CHANGE_WIFI_MULTICAST_STATE<br>Allows applications to enter Wi-Fi Multicast mode.<br>允许应用程序进入Wi-Fi多播模式（Wi-Fi Multicast mode）。</p>
+<p>String    CHANGE_WIFI_STATE<br>Allows applications to change Wi-Fi connectivity state.<br>允许应用程序改变Wi-Fi网络连接状态。</p>
+<p>String    CLEAR_APP_CACHE<br>Allows an application to clear the caches of all installed applications on the device.<br>允许应用程序清除设备上所有已安装的应用程序的缓存。</p>
+<p>String    CONTROL_LOCATION_UPDATES<br>Allows enabling/disabling location update notifications from the radio.<br>允许通过无线模块，启用/禁止位置定位更新提示。</p>
+<p>String    DELETE_CACHE_FILES<br>Allows an application to delete cache files.<br>允许应用程序删除缓存文件。</p>
+<p>String    DELETE_PACKAGES<br>Allows an application to delete packages.<br>允许应用程序删除软件包。</p>
+<p>String    DIAGNOSTIC<br>Allows applications to RW to diagnostic resources.<br>允许程序读取或写入诊断资源。</p>
+<p>String    DISABLE_KEYGUARD<br>Allows applications to disable the keyguard if it is not secure.<br>允许应用程序禁止锁屏 (不安全)。</p>
+<p>String    DUMP<br>Allows an application to retrieve state dump information from system services.<br>允许应用程序从系统服务接收状态，抓取信息。</p>
+<p>String    EXPAND_STATUS_BAR<br>Allows an application to expand or collapse the status bar.<br>允许应用程序展开或折叠状态栏。</p>
+<p>String    FACTORY_TEST<br>Run as a manufacturer test application, running as the root user.<br>以root用户的权限执行制造商测试应用程序。</p>
+<p>String    GET_ACCOUNTS<br>Allows access to the list of accounts in the Accounts Service.<br>允许访问Accounts Service中的帐户列表。</p>
+<p>String    GET_ACCOUNTS_PRIVILEGED<br>Allows access to the list of accounts in the Accounts Service.<br>允许访问Accounts Service中的帐户列表。</p>
+<p>String    GET_PACKAGE_SIZE<br>Allows an application to find out the space used by any package.<br>允许应用程序获取任何应用程序包所占用的空间。</p>
+<p>String    GET_TASKS<br>This constant was deprecated in API level 21. No longer enforced.<br>此常量在API level 21版本中被取消。不再支持。</p>
+<p>String    GLOBAL_SEARCH<br>This permission can be used on content providers to allow the global search system to access their data.<br>此权限可用于content provider, 以允许全局搜索系统访问其数据。</p>
+<p>String    INSTALL_LOCATION_PROVIDER<br>Allows an application to install a location provider into the Location Manager.<br>允许应用程序在Location Manager中安装一个LocationProvider。</p>
+<p>String    INSTALL_PACKAGES<br>Allows an application to install packages.<br>允许应用程序安装应用程序包。</p>
+<p>String    INSTALL_SHORTCUT<br>Allows an application to install a shortcut in Launcher.<br>允许应用程序在Launher中安装一个快捷方式。</p>
+<p>String    INSTANT_APP_FOREGROUND_SERVICE<br>Allows an instant app to create foreground services.<br>允许应用程序实例创建前台服务。</p>
+<p>String    INTERNET<br>Allows applications to open network sockets.<br>允许应用程序打开网络套接字（socket）。</p>
+<p>String    KILL_BACKGROUND_PROCESSES<br>Allows an application to call killBackgroundProcesses(String).<br>允许应用程序调用killBackgroundProcesses(String)。</p>
+<p>String    LOCATION_HARDWARE<br>Allows an application to use location features in hardware, such as the geofencing api.<br>允许应用程序使用硬件位置定位功能, 如geofencing api。</p>
+<p>String    MANAGE_DOCUMENTS<br>Allows an application to manage access to documents, usually as part of a document picker.<br>允许应用程序管理访问文档, 通常作为文件浏览器的一部分。</p>
+<p>String    MANAGE_OWN_CALLS<br>Allows an application to manage its own calls, but rely on the system to route focus to the currently active call.<br>允许应用程序管理自己的调用, 但依赖于系统将焦点设置到当前activity上。</p>
+<p>String    MASTER_CLEAR<br>Not for use by third-party applications.<br>不可用与第三方应用程序。</p>
+<p>String    MEDIA_CONTENT_CONTROL<br>Allows an application to know what content is playing and control its playback.<br>允许应用程序知道正在播放的内容并控制其回放。</p>
+<p>String    MODIFY_AUDIO_SETTINGS<br>Allows an application to modify global audio settings.<br>允许应用程序修改全局的音频设置。</p>
+<p>String    MODIFY_PHONE_STATE<br>Allows modification of the telephony state - power on, mmi, etc.<br>允许修改手机状态：电源，MMI码，等。</p>
+<p>String    MOUNT_FORMAT_FILESYSTEMS<br>Allows formatting file systems for removable storage.<br>允许格式化可移动存储的文件系统。</p>
+<p>String    MOUNT_UNMOUNT_FILESYSTEMS<br>Allows mounting and unmounting file systems for removable storage.<br>允许挂载和卸载可移动存储的文件系统。</p>
+<p>String    NFC<br>Allows applications to perform I/O operations over NFC.<br>允许应用程序通过NFC执行输入输出操作。</p>
+<p>String    PACKAGE_USAGE_STATS<br>Allows an application to collect component usage statistics<br>允许应用程序收集软件包组件的使用统计数据。</p>
+<p>Declaring the permission implies intention to use the API and the user of the device can grant permission through the Settings application.<br>声明此授权，意味着使用API和设备的用户可以通过“Setting”应用程序授予权限。</p>
+<p>String    PERSISTENT_ACTIVITY<br>This constant was deprecated in API level 9. This functionality will be removed in the future; please do not use. Allow an application to make its activities persistent.<br>此常量在API level 9版本中被取消。这个功能将在未来的版本中被删除，请不要再使用。允许应用程序设置它的activities持久运行（从系统启动到系统关闭，整个系统运行周期）。</p>
+<p>String    PROCESS_OUTGOING_CALLS<br>Allows an application to see the number being dialed during an outgoing call with the option to redirect the call to a different number or abort the call altogether.<br>允许应用程序查看正在拨出通话的电话号码, 该选项可将呼叫重定向到其他号码或中止呼叫。</p>
+<p>String    READ_CALENDAR<br>Allows an application to read the user’s calendar data.<br>允许应用程序读取用户的日历数据。</p>
+<p>String    READ_CALL_LOG<br>Allows an application to read the user’s call log.<br>允许应用程序读取用户的电话呼叫记录。</p>
+<p>String    READ_CONTACTS<br>Allows an application to read the user’s contacts data.<br>允许应用程序读取用户的联系人数据。</p>
+<p>String    READ_EXTERNAL_STORAGE<br>Allows an application to read from external storage.<br>允许应用程序读取外部存储设备。</p>
+<p>String    READ_FRAME_BUFFER<br>Allows an application to take screen shots and more generally get access to the frame buffer data.<br>允许应用程序获取屏幕快照（截屏），通常得以访问帧缓冲区数据。</p>
+<p>String    READ_INPUT_STATE<br>This constant was deprecated in API level 16. The API that used this permission has been removed.<br>此常量在API level 16版本中被取消。此权限的API已删除。</p>
+<p>String    READ_LOGS<br>Allows an application to read the low-level system log files.<br>允许应用程序读取底层系统记录文件。</p>
+<p>String    READ_PHONE_NUMBER<br>Allows read access to the device’s phone number.<br>允许读取设备的电话号码。</p>
+<p>String    READ_PHONE_STATE<br>Allows read only access to phone state, including the phone number of the device, current cellular network information, the status of any ongoing calls, and a list of any PhoneAccounts registered on the device.<br>允许只读访问电话状态, 包括设备的电话号码、当前的蜂窝网络信息、任何正在进行的呼叫的状态以及在设备上注册的任何PhoneAccount的列表。</p>
+<p>String    READ_SMS<br>Allows an application to read SMS messages.<br>允许应用程序读取SMS短消息。</p>
+<p>String    READ_SYNC_SETTINGS<br>Allows applications to read the sync settings.<br>允许应用程序读取同步设置。</p>
+<p>String    READ_SYNC_STATS<br>Allows applications to read the sync stats.<br>允许应用程序读取同步状态。</p>
+<p>String    READ_VOICEMAIL<br>Allows an application to read voicemails in the system.<br>允许应用程序读取在系统中的语音信箱。</p>
+<p>String    REBOOT<br>Required to be able to reboot the device.<br>请求能够重启设备。</p>
+<p>String    RECEIVE_BOOT_COMPLETED<br>Allows an application to receive the ACTION_BOOT_COMPLETED that is broadcast after the system finishes booting.<br>允许应用程序接受，系统启动完成后，广播的ACTION_BOOT_COMPLETED的消息。</p>
+<p>String    RECEIVE_MMS<br>Allows an application to monitor incoming MMS messages.<br>允许应用程序监视收到的彩信(MMS)。</p>
+<p>String    RECEIVE_SMS<br>Allows an application to receive SMS messages.<br>允许应用程序接受SMS短消息。</p>
+<p>String    RECEIVE_WAP_PUSH<br>Allows an application to receive WAP push messages.<br>允许应用程序接受WAP，推送（PUSH)消息。</p>
+<p>String    RECORD_AUDIO<br>Allows an application to record audio.<br>允许应用程序录音。</p>
+<p>String    REORDER_TASKS<br>Allows an application to change the Z-order of tasks.<br>允许程序改变任务的Z轴排列。</p>
+<p>String    REQUEST_DELETE_PACKAGES<br>Allows an application to request deleting packages.<br>允许应用程序请求删除应用程序包。</p>
+<p>String    REQUEST_IGNORE_BATTERY_OPTIMIZATIONS<br>Permission an application must hold in order to use ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS.<br>使用ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS，应用程序必须拥有此权限。</p>
+<p>String    REQUEST_INSTALL_PACKAGES<br>Allows an application to request installing packages.<br>允许应用程序请求安装应用程序包。</p>
+<p>String    RESTART_PACKAGES<br>This constant was deprecated in API level 8. The restartPackage(String) API is no longer supported.<br>此常量在API level 8版本中被取消。restartPackage(String)不再支持。</p>
+<p>String    RESTRICTED_VR_ACCESS<br>Must be required by system apps when accessing restricted VR APIs.<br>访问受限制的VR API, 必须是系统应用程序。</p>
+<p>String    RUN_IN_BACKGROUND<br>Allows an app to run in the background.<br>允许应用程序运行在后台。</p>
+<p>String    SEND_RESPOND_VIA_MESSAGE<br>Allows an application (Phone) to send a request to other applications to handle the respond-via-message action during incoming calls.<br>允许应用程序 (电话) 向其他应用程序发送请求, 以在来电期间处理消息的响应。</p>
+<p>String    SEND_SMS<br>Allows an application to send SMS messages.<br>允许应用程序发送SMS短消息。</p>
+<p>String    SET_ALARM<br>Allows an application to broadcast an Intent to set an alarm for the user.<br>允许应用程序广播一个Intent，为用户设置警告。</p>
+<p>String    SET_ALWAYS_FINISH<br>Allows an application to control whether activities are immediately finished when put in the background.<br>允许当应用程序被放置到后台时，控制是否立即完成activity。</p>
+<p>String    SET_ANIMATION_SCALE<br>Modify the global animation scaling factor.<br>修改全局动画缩放比例。</p>
+<p>String    SET_DEBUG_APP<br>Configure an application for debugging.<br>配置应用程序可以调试。</p>
+<p>String    SET_PREFERRED_APPLICATIONS<br>This constant was deprecated in API level 7. No longer useful, see addPackageToPreferred(String) for details.<br>此常量在API level 7版本中被取消。不再可用, 查看 addPackageToPreferred(String)获取详细说明。</p>
+<p>String    SET_PROCESS_LIMIT<br>Allows an application to set the maximum number of (not needed) application processes that can be running.<br>允许应用程序设置可以运行的最多(不再需要)的进程数。</p>
+<p>String    SET_TIME<br>Allows applications to set the system time.<br>允许应用程序设置系统时间。</p>
+<p>String    SET_TIME_ZONE<br>Allows applications to set the system time zone.<br>允许应用程序设置系统时区。</p>
+<p>String    SET_WALLPAPER<br>Allows applications to set the wallpaper.<br>允许应用程序设置壁纸。</p>
+<p>String    SET_WALLPAPER_HINTS<br>Allows applications to set the wallpaper hints.<br>允许应用程序设置壁纸提示。</p>
+<p>String    SIGNAL_PERSISTENT_PROCESSES<br>Allow an application to request that a signal be sent to all persistent processes.<br>允许应用程序请求将信号发送到所有永久运行的进程。</p>
+<p>String    STATUS_BAR<br>Allows an application to open, close, or disable the status bar and its icons.<br>允许应用程序打开，关闭，或禁止状态栏和状态栏图标。</p>
+<p>String    SYSTEM_ALERT_WINDOW<br>Allows an app to create windows using the type TYPE_APPLICATION_OVERLAY, shown on top of all other apps.<br>允许应用程序使用TYPE_APPLICATION_OVERLAY类型创建窗口，可以将窗口显示在所有其他应用程序的顶层。</p>
+<p>String    TRANSMIT_IR<br>Allows using the device’s IR transmitter, if available.<br>允许使用设备的红外传输模块，如果有的话。</p>
+<p>String    UNINSTALL_SHORTCUT<br>This permission is no longer supported.<br>此权限已经不再支持。</p>
+<p>String    UPDATE_DEVICE_STATS<br>Allows an application to update device statistics.<br>允许应用程序更新设备统计信息。</p>
+<p>String    USE_DATA_IN_BACKGROUND<br>Allows an app to use data in the background.<br>允许应用程序在后台使用数据。</p>
+<p>String    USE_FINGERPRINT<br>Allows an app to use fingerprint hardware.<br>允许应用程序使用指纹硬件模块。</p>
+<p>String    USE_SIP<br>Allows an application to use SIP service.<br>允许应用程序使用SIP service。</p>
+<p>String    VIBRATE<br>Allows access to the vibrator.<br>允许应用程序使用振动硬件模块。</p>
+<p>String    WAKE_LOCK<br>Allows using PowerManager WakeLocks to keep processor from sleeping or screen from dimming.<br>允许使用PowerManager WakeLocks防止处理器休眠或屏幕变暗。</p>
+<p>String    WRITE_APN_SETTINGS<br>Allows applications to write the apn settings.<br>允许应用程序写入APN接入点设置。</p>
+<p>String    WRITE_CALENDAR<br>Allows an application to write the user’s calendar data.<br>允许应用程序写入用户的日历数据。</p>
+<p>String    WRITE_CALL_LOG<br>Allows an application to write (but not read) the user’s call log data.<br>允许应用程序写入（但不可读取）的电话呼叫记录数据。</p>
+<p>String    WRITE_CONTACTS<br>Allows an application to write the user’s contacts data.<br>允许应用程序写入用户的日历数据。</p>
+<p>String    WRITE_EXTERNAL_STORAGE<br>Allows an application to write to external storage.<br>允许应用程序写入外部存储设备。</p>
+<p>String    WRITE_GSERVICES<br>Allows an application to modify the Google service map.<br>允许应用程序修改Google Service地图。</p>
+<p>String    WRITE_SECURE_SETTINGS<br>Allows an application to read or write the secure system settings.<br>允许应用程序读写系统安全设置。</p>
+<p>String    WRITE_SETTINGS<br>Allows an application to read or write the system settings.<br>允许应用程序读写系统设置。</p>
+<p>String    WRITE_SYNC_SETTINGS<br>Allows applications to write the sync settings.<br>允许应用程序写入同步设置。</p>
+<p>String    WRITE_VOICEMAIL<br>Allows an application to modify and remove existing voicemails in the system.<br>允许应用程序修改或删除系统中的语音信箱。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>文有所思，读有所益，快哉！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="tuchaofu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-permission/" rel="tag"># Android permission</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/04/react-nativa/" rel="next" title="React Nativa 源码解析">
+                <i class="fa fa-chevron-left"></i> React Nativa 源码解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/14/java-引用/" rel="prev" title="Java 引用">
+                Java 引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjkxOS8xMzQ1NQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.png" alt="tuchaofu">
+            
+              <p class="site-author-name" itemprop="name">tuchaofu</p>
+              <p class="site-description motion-element" itemprop="description">干一行，爱一行，专一行！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nicetu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#permission-group"><span class="nav-number">1.</span> <span class="nav-text">permission_group</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#permission"><span class="nav-number">2.</span> <span class="nav-text">permission</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tuchaofu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
