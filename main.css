@@ -1,0 +1,245 @@
+    /* Reset CSS */
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    /* Typography */
+    
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #63656f;
+        background-color: #f2f3f5;
+        cursor: pointer;
+    }
+    
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 1.5rem 0 1.5rem;
+        line-height: 1.2;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+    }
+    
+    p {
+        margin-bottom: 1.5rem;
+    }
+    
+    a {
+        color: #007bff;
+        text-decoration: none;
+        line-height: 2rem;
+    }
+    
+    a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+    
+    .box {
+        display: flex;
+        flex-direction: row;
+        height: auto;
+        margin: 20px auto 40px;
+        max-width: 1200px;
+    }
+    
+    nav {
+        width: 200px;
+        min-width: 200px;
+        font-size: 16px;
+        padding: 0 0 40px;
+        border-radius: 2px;
+        position: sticky;
+        top: 20px;
+       
+    }
+    
+    nav>ul {
+        background: #fff;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    
+    nav>ul>ol {
+        margin-left: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 2px;
+    }
+    
+    nav>ul>ol:hover {
+        background-color: #eaf2ff;
+    }
+
+    #adc{
+        width: 200px;
+        height: 100px;
+        margin-top: 10px;
+        background-image: url("./img/ali_yun.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 2px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        -ms-border-radius: 2px;
+        -o-border-radius: 2px;
+}
+    
+    #right_box {
+        background: #fff;
+        margin-left: 20px;
+        border-radius: 4px;
+        width: 100%;
+        overflow-x: visible;
+        max-width: 980px;
+        padding-left: 20px;
+    }
+    
+    #page_title {
+        height: 80px;
+        line-height: 40px;
+        margin: 0px;
+        padding: 0px;
+        padding: 20px;
+        background: #fff;
+        border-bottom: 1px solid #e5e6ea;
+    }
+    
+    #content {
+        width: 100%;
+        height: auto;
+        overflow-y: visible;
+        padding: 0 40px 80px;
+    }
+    
+    img {
+        max-height: 300px;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    .button {
+        color: #fff;
+        background-color: #009a61;
+        border-color: #008151;
+        padding: 0 13px;
+        font-size: 14px;
+        border-radius: 4px;
+        margin: 10px;
+    }
+    
+    #show {
+        width: 50%;
+        border: 1px solid #ddd;
+        padding: 50px;
+        box-sizing: border-box;
+        float: left;
+        height: auto;
+    }
+    
+    .hljs-comment,
+    .hljs-quote {
+        color: #989498
+    }
+    
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-attribute,
+    .hljs-tag,
+    .hljs-name,
+    .hljs-selector-id,
+    .hljs-selector-class,
+    .hljs-regexp,
+    .hljs-link,
+    .hljs-deletion {
+        color: #dd464c
+    }
+    
+    .hljs-number,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type,
+    .hljs-params {
+        color: #fd8b19
+    }
+    
+    .hljs-class .hljs-title {
+        color: #fdcc59
+    }
+    
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-addition {
+        color: #8fc13e
+    }
+    
+    .hljs-meta {
+        color: #149b93
+    }
+    
+    .hljs-function,
+    .hljs-section,
+    .hljs-title {
+        color: #1290bf
+    }
+    
+    .hljs-keyword,
+    .hljs-selector-tag {
+        color: #c85e7c
+    }
+    
+    .hljs {
+        display: block;
+        background: #322931;
+        color: #b9b5b8;
+        padding: 0.5em
+    }
+    
+    .hljs-emphasis {
+        font-style: italic
+    }
+    
+    .hljs-strong {
+        font-weight: bold
+    }
+    
+    pre>code.hljs {
+        color: #333;
+        background: #f8f8f8;
+        border-radius: 4px;
+    }
+    
+    pre>code {
+        font-size: 14px;
+        padding: 15px 12px;
+        margin: 0;
+        word-break: normal;
+        display: block;
+        overflow-x: auto;
+        color: #333;
+        background: #f8f8f8;
+    }
+    
+    pre {
+        font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+    }
+    
+    code {
+        word-break: break-word;
+        border-radius: 2px;
+        overflow-x: auto;
+        background-color: #fff5f5;
+        color: #de6e58;
+        font-size: .87em;
+        padding: 0.065em 0.4em;
+    }
