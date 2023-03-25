@@ -4,12 +4,13 @@
 <head>
     <title>FrontGPT</title>
     <meta name="keywords" content="前端,HTML,CSS,JavaScript,react,vue,js,算法,js常用方法,css常用动画,GPT,前端规范">
+    <meta name="description" content="这是一个用于学习前端开发的网页文档,包含HTML、CSS、JavaScript等内容。">
     <link rel="stylesheet" type="text/css" href="./main.css">
     <link rel="stylesheet" type="text/css" href="./anim.css">
     <link rel="shortcut icon" href="./img/icon.png" type="image/x-icon">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <script src="https://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
 </head>
 
 <body>
@@ -71,7 +72,21 @@
 
     //公共更新方法
     function getMd(name) {
-        axios.get(name)
+        axios(
+
+            {
+                url: name,
+                method: 'get',
+                responseType: 'arraybuffer',
+                transformResponse: [function (data) {
+                    let ret = '';
+                    let decoder = new TextDecoder('utf-8');
+                    let uint8array = new Uint8Array(data);
+                    ret = decoder.decode(uint8array);
+                    return ret;
+                }]
+            })
+
             .then(function (response) {
                 document.getElementById('content').innerHTML = marked.parse(response.data);
                 window.scrollTo(0, 0)
