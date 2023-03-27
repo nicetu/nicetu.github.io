@@ -1,12 +1,13 @@
     /* Reset CSS */
-    
+
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
+
     /* Typography */
-    
+
     body {
         font-family: Arial, sans-serif;
         font-size: 16px;
@@ -15,7 +16,7 @@
         background-color: #f2f3f5;
         cursor: pointer;
     }
-    
+
     h1,
     h2,
     h3,
@@ -27,22 +28,22 @@
         font-weight: bold;
         font-family: Arial, sans-serif;
     }
-    
+
     p {
         margin-bottom: 1.5rem;
     }
-    
+
     a {
         color: #007bff;
         text-decoration: none;
         line-height: 2rem;
     }
-    
+
     a:hover {
         color: #0056b3;
         text-decoration: underline;
     }
-    
+
     .box {
         display: flex;
         flex-direction: row;
@@ -50,36 +51,36 @@
         margin: 20px auto 40px;
         max-width: 1200px;
     }
-    
+
     nav {
         width: 200px;
         min-width: 200px;
         font-size: 16px;
-        padding: 0 0 40px;
+        padding: 0;
         border-radius: 2px;
         position: sticky;
         top: 20px;
-       
+
     }
-    
+
     nav>ul {
         background: #fff;
         padding-top: 20px;
         padding-bottom: 20px;
     }
-    
+
     nav>ul>ol {
         margin-left: 10px;
         padding-left: 10px;
         padding-right: 10px;
         border-radius: 2px;
     }
-    
+
     nav>ul>ol:hover {
         background-color: #eaf2ff;
     }
 
-    #adc{
+    #adc {
         width: 200px;
         height: 100px;
         margin-top: 10px;
@@ -91,8 +92,8 @@
         -moz-border-radius: 2px;
         -ms-border-radius: 2px;
         -o-border-radius: 2px;
-}
-    
+    }
+
     #right_box {
         background: #fff;
         margin-left: 20px;
@@ -102,7 +103,7 @@
         max-width: 980px;
         padding-left: 20px;
     }
-    
+
     #page_title {
         height: 80px;
         line-height: 40px;
@@ -112,20 +113,20 @@
         background: #fff;
         border-bottom: 1px solid #e5e6ea;
     }
-    
+
     #content {
         width: 100%;
         height: auto;
         overflow-y: visible;
         padding: 0 40px 80px;
     }
-    
+
     img {
         max-height: 300px;
         max-width: 100%;
         margin: 0 auto;
     }
-    
+
     .button {
         color: #fff;
         background-color: #009a61;
@@ -135,7 +136,7 @@
         border-radius: 4px;
         margin: 10px;
     }
-    
+
     #show {
         width: 50%;
         border: 1px solid #ddd;
@@ -144,12 +145,12 @@
         float: left;
         height: auto;
     }
-    
+
     .hljs-comment,
     .hljs-quote {
         color: #989498
     }
-    
+
     .hljs-variable,
     .hljs-template-variable,
     .hljs-attribute,
@@ -162,7 +163,7 @@
     .hljs-deletion {
         color: #dd464c
     }
-    
+
     .hljs-number,
     .hljs-built_in,
     .hljs-builtin-name,
@@ -171,54 +172,54 @@
     .hljs-params {
         color: #fd8b19
     }
-    
+
     .hljs-class .hljs-title {
         color: #fdcc59
     }
-    
+
     .hljs-string,
     .hljs-symbol,
     .hljs-bullet,
     .hljs-addition {
         color: #8fc13e
     }
-    
+
     .hljs-meta {
         color: #149b93
     }
-    
+
     .hljs-function,
     .hljs-section,
     .hljs-title {
         color: #1290bf
     }
-    
+
     .hljs-keyword,
     .hljs-selector-tag {
         color: #c85e7c
     }
-    
+
     .hljs {
         display: block;
         background: #322931;
         color: #b9b5b8;
         padding: 0.5em
     }
-    
+
     .hljs-emphasis {
         font-style: italic
     }
-    
+
     .hljs-strong {
         font-weight: bold
     }
-    
+
     pre>code.hljs {
         color: #333;
         background: #f8f8f8;
         border-radius: 4px;
     }
-    
+
     pre>code {
         font-size: 14px;
         padding: 15px 12px;
@@ -229,11 +230,11 @@
         color: #333;
         background: #f8f8f8;
     }
-    
+
     pre {
         font-family: Menlo, Monaco, Consolas, Courier New, monospace;
     }
-    
+
     code {
         word-break: break-word;
         border-radius: 2px;
