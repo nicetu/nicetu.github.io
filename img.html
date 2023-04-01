@@ -2,96 +2,12 @@
 
 <html>
 
-
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <title>Image Comparison</title>
-
-    <style>
-        /* Style for image comparison */
-
-
-        h1 {
-            margin-left: 20px;
-        }
-
-        .image-container {
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            margin-bottom: 20px;
-
-        }
-
-        #box {
-            display: flex;
-            flex-direction: row;
-            margin: 20px 20px auto;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            margin-right: 20px;
-            border-right: 1px solid #e5e6ea;
-
-        }
-
-        #result {
-            width: 100%;
-        }
-
-        #preview1 {
-            width: 200px;
-            height: auto;
-        }
-
-        #preview2 {
-            width: 200px;
-            height: auto;
-        }
-
-        button {
-            max-width: 200px;
-            margin-top: 20px;
-        }
-
-
-
-        img {
-
-            max-width: 100%;
-
-            height: auto;
-
-        }
-
-
-
-        .image-container .label {
-
-            position: absolute;
-
-            top: 0;
-            left: 0;
-
-            background-color: #f44336;
-
-            color: white;
-
-            padding: 5px;
-
-            font-size: 16px;
-
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <title>FrontGPT</title>
+    <meta name="keywords" content="像素对比，图片对比">
+    <meta name="description" content="这是一个用于学习前端开发的网页文档,包含HTML、CSS、JavaScript等内容。">
+    <link rel="stylesheet" type="text/css" href="./img.css">
 </head>
 
 <body>
@@ -99,16 +15,15 @@
     <div id="box">
         <form>
             <label for="image1">Image 1:</label>
-            <input type="file" id="image1" name="image1" onchange="previewImage(this,'preview1')"><br>
-            <img id="preview1" src="" style="max-width: 100%; height: auto;">
+            <input type="file" id="image1" name="image1" onchange="previewImage(this,'preview1')" /><br />
+            <img id="preview1" src="" style="max-width: 100%; height: auto" />
             <label for="image1">Image 2:</label>
-            <input type="file" id="image2" name="image2" onchange="previewImage(this,'preview2')"><br>
-            <img id="preview2" src="" style="max-width: 100%; height: auto;">
+            <input type="file" id="image2" name="image2" onchange="previewImage(this,'preview2')" /><br />
+            <img id="preview2" src="" style="max-width: 100%; height: auto" />
             <button type="button" onclick="compareImages()">Compare Images</button>
         </form>
-        <div id="result">You can add an image comparison on the left.</div>
+        <div id="result">You can add two images comparison on the left.</div>
     </div>
-
 
     <script>
         function previewImage(input, previewId) {
@@ -117,160 +32,101 @@
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     preview.src = e.target.result;
-                }
+                };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-
         function compareImages() {
-
             var file1 = document.getElementById("image1").files[0];
-
             var file2 = document.getElementById("image2").files[0];
-
             if (file1 && file2) {
-
                 var reader1 = new FileReader();
-
                 reader1.readAsDataURL(file1);
-
                 reader1.onload = function (e) {
-
                     var img1 = document.createElement("img");
-
                     img1.src = e.target.result;
-
                     img1.onload = function () {
-
                         var reader2 = new FileReader();
-
                         reader2.readAsDataURL(file2);
-
                         reader2.onload = function (e) {
-
                             var img2 = document.createElement("img");
-
                             img2.src = e.target.result;
-
                             img2.onload = function () {
-
                                 var canvas = document.createElement("canvas");
-
                                 var ctx = canvas.getContext("2d");
-
                                 var width = Math.max(img1.width, img2.width);
-
                                 var height = Math.max(img1.height, img2.height);
-
                                 canvas.width = width;
-
                                 canvas.height = height;
-
                                 ctx.drawImage(img1, 0, 0);
-
                                 ctx.globalCompositeOperation = "difference";
-
                                 ctx.drawImage(img2, 0, 0);
-
                                 var data = ctx.getImageData(0, 0, width, height).data;
-
                                 var diff = 0;
-
                                 for (var i = 0; i < data.length; i += 4) {
-
-                                    if (data[i] !== 0 || data[i + 1] !== 0 || data[i + 2] !== 0) {
-
+                                    if (
+                                        data[i] !== 0 ||
+                                        data[i + 1] !== 0 ||
+                                        data[i + 2] !== 0
+                                    ) {
                                         diff++;
-
                                     }
-
                                 }
-
-                                var percent = diff / (width * height) * 100;
-
+                                var percent = (diff / (width * height)) * 100;
                                 var result = document.getElementById("result");
-
-                                if (percent == 0.00) {
-                                    result.innerHTML = "<div>result:Images are " + percent.toFixed(2) +
+                                if (percent == 0.0) {
+                                    result.innerHTML =
+                                        "<div>result:Images are " +
+                                        percent.toFixed(2) +
                                         "% different,They are the same picture!</div>";
                                 } else {
-                                    result.innerHTML = "<div>result:Images are " + percent.toFixed(2) +
+                                    result.innerHTML =
+                                        "<div>result:Images are " +
+                                        percent.toFixed(2) +
                                         "% different,You need to focus on the differences.</div>";
                                 }
                                 // Compare the pixel data of the two images
                                 for (let i = 0; i < data.length; i += 4) {
-
                                     var r1 = data[i];
-
                                     var g1 = data[i + 1];
-
                                     var b1 = data[i + 2];
-
                                     var r2 = data[i + 4];
-
                                     var g2 = data[i + 5];
-
                                     var b2 = data[i + 6];
-
-
-
                                     // Compare the RGB values of the two pixels
-
                                     if (r1 !== r2 || g1 !== g2 || b1 !== b2) {
-
                                         // Mark the different pixel on the canvas
-
-                                        ctx.fillStyle = 'red';
-
-                                        ctx.fillRect((i / 4) % canvas.width, Math.floor(i / 4 / canvas
-                                            .width), 1, 1);
-
+                                        ctx.fillStyle = "red";
+                                        ctx.fillRect(
+                                            (i / 4) % canvas.width,
+                                            Math.floor(i / 4 / canvas.width),
+                                            1,
+                                            1
+                                        );
                                     }
-
                                 }
 
                                 ctx.drawImage(img1, 0, 0);
-
-
-
                                 // Convert the canvas to an image and display it
-
-                                var diffImg = document.createElement('img');
-
+                                var diffImg = document.createElement("img");
                                 diffImg.src = canvas.toDataURL();
-
                                 result.appendChild(diffImg);
-
                             };
-
                             img2.onerror = function () {
-
                                 alert("Error loading image 2");
-
                             };
                         };
-
                     };
-
                     img1.onerror = function () {
-
                         alert("Error loading image 1");
-
                     };
                 };
-
             } else {
-
                 alert("Please select two images");
-
             }
-
         }
     </script>
-
 </body>
-
-
 
 </html>
