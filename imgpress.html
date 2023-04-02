@@ -2,10 +2,11 @@
 <html>
 
 <head>
-	<title>图片压缩</title>
-	<meta name="keywords" content="前端,HTML,CSS,JavaScript,react,vue,js,算法,js常用方法,css常用动画,GPT,前端规范">
+	<title>FrontGPT</title>
+	<meta name="keywords" content="图片压缩">
 	<meta name="description" content="这是一个用于学习前端开发的网页文档,包含HTML、CSS、JavaScript等内容。">
-	<link rel="stylesheet" type="text/css" href="./img.css">
+	<link rel="stylesheet" type="text/css" href="./css/img.css">
+	<link rel="stylesheet" type="text/css" href="./css/common.css">
 	<style type="text/css">
 		#preview {
 			width: 200px;
@@ -19,12 +20,11 @@
 		<form>
 			<h1>Image <br /> Compression</h1>
 			<div>
-				<p>压缩后不超过<input type="number" id="sizeInput" onchange="handleFiles()" value="200" min="100" max="2000"
-						step="100" />kb</p>
+				<p>压缩后不超过 <input type="number" id="sizeInput" onchange="handleFiles()" value="200" min="100" max="2000"
+						step="100" /> kb</p>
 
-				<input type="file" id="fileInput" onchange="handleFiles()" accept="image/*" />
-			</div>
-			<div>
+				<p><input type="file" id="fileInput" onchange="handleFiles()" accept="image/*" /></p>
+
 				<img id="preview" src="" style="max-width: 100%; height: auto" /><br />
 			</div>
 		</form>
