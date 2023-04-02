@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>图片压缩</title>
+	<meta name="keywords" content="前端,HTML,CSS,JavaScript,react,vue,js,算法,js常用方法,css常用动画,GPT,前端规范">
+	<meta name="description" content="这是一个用于学习前端开发的网页文档,包含HTML、CSS、JavaScript等内容。">
+	<link rel="stylesheet" type="text/css" href="./img.css">
+	<style type="text/css">
+		#preview {
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="box">
+		<form>
+			<h1>Image <br /> Compression</h1>
+			<div>
+				<p>压缩后不超过<input type="number" id="sizeInput" onchange="handleFiles()" value="200" min="100" max="2000"
+						step="100" />kb</p>
+
+				<input type="file" id="fileInput" onchange="handleFiles()" accept="image/*" />
+			</div>
+			<div>
+				<img id="preview" src="" style="max-width: 100%; height: auto" /><br />
+			</div>
+		</form>
+		<div id="result">
+			<button onclick="downLoad()">下载</button>
+			<span id="out_press"></span>
+			<img id="preview1" src="" style="width: 100%; height: auto" /><br />
+		</div>
+	</div>
+	<script type="text/javascript">
+		function handleFiles() {
+			var fileInput = document.getElementById("fileInput");
+			var preview = document.getElementById("preview");
+			var file = fileInput.files[0];
+			var reader = new FileReader();
+			reader.onload = function () {
+				preview.src = reader.result;
+				var size = document.getElementById("sizeInput").value;
+				compressImage(800, size);
+			}
+			reader.readAsDataURL(file);
+		}
+
+
+		function compressImage(size, maxSize) {
+			var preview = document.getElementById("preview");
+			var preview1 = document.getElementById("preview1");
+			var img = new Image();
+			img.src = preview.src;
+			img.onload = function () {
+				var canvas = document.createElement('canvas');
+				var ctx = canvas.getContext('2d');
+				var width = img.width;
+				var height = img.height;
+				var maxWidth = size;
+				var maxHeight = size;
+				if (width > height) {
+					if (width > maxWidth) {
+						height *= maxWidth / width;
+						width = maxWidth;
+					}
+				} else {
+					if (height > maxHeight) {
+						width *= maxHeight / height;
+						height = maxHeight;
+					}
+				}
+				canvas.width = width;
+				canvas.height = height;
+				ctx.drawImage(img, 0, 0, width, height);
+				var base64 = canvas.toDataURL('image/png');
+				if (((base64.length * 3 / 4) / 1024) > maxSize) {
+					compressImage(maxWidth - 2, maxSize);
+				} else {
+					preview1.src = base64;
+					var ratio = (base64.length * 3 / 4) / (preview.src.length * 3 / 4);
+					var ratioText = "压缩比例: " + (ratio * 100).toFixed(2) + "%";
+					document.getElementById("out_press").innerHTML = ratioText + "，压缩后大小: " + ((base64.length * 3 / 4) /
+							1024)
+						.toFixed(2) + "KB";
+				}
+
+			}
+
+		}
+
+
+
+		function downLoad() {
+			var link = document.createElement('a');
+			link.download = 'image.png';
+			link.href = document.getElementById('preview1').src;
+			link.click();
+		}
+	</script>
+</body>
+
+</html>

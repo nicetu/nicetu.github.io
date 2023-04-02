@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>图片转base64</title>
+    <meta name="keywords" content="前端,HTML,CSS,JavaScript,react,vue,js,算法,js常用方法,css常用动画,GPT,前端规范">
+    <meta name="description" content="这是一个用于学习前端开发的网页文档,包含HTML、CSS、JavaScript等内容。">
+    <link rel="stylesheet" type="text/css" href="./img.css">
+
+    <style type="text/css">
+        #preview {
+            width: 200px;
+            height: 200px;
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px solid #e5d6ea;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <form>
+            <h1>Image <br />ToBase64</h1>
+            <div>
+                <input type="file" id="fileInput" onchange="handleFiles()" accept="image/*" />
+            </div>
+            <div>
+                <img id="preview" src="" style="max-width: 100%; height: auto" /><br />
+            </div>
+        </form>
+        <div id="result">
+            <button onclick="copyToClipboard()">复制</button>
+            <textarea id="base64" rows="20" placeholder="左侧添加图片,此处为生成的Base64的结果"></textarea>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function handleFiles() {
+            var fileInput = document.getElementById("fileInput");
+            var preview = document.getElementById("preview");
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            reader.onload = function () {
+                preview.src = reader.result;
+                document.getElementById("base64").value = reader.result.split(",")[1];
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function copyToClipboard() {
+            var base64 = document.getElementById("base64");
+            base64.select();
+            document.execCommand("copy");
+            alert("已复制到剪贴板");
+        }
+    </script>
+</body>
+
+</html>

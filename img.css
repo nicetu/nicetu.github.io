@@ -24,21 +24,22 @@ h1 {
 #box {
     display: flex;
     flex-direction: row;
-    margin: 20px 20px auto;
     background-color: #fff;
+    margin: 20px auto 40px;
+    max-width: 1200px;
 }
 
 form {
     padding: 20px 20px 40px;
     display: flex;
     flex-direction: column;
-    margin-right: 20px;
-    border-right: 4px solid #f2f3f5;
+    border-right: 10px solid #f2f3f5;
 }
 
 #result {
     padding: 20px;
     width: 100%;
+    min-height: calc(100vh - 80px);
 }
 
 #preview1 {
@@ -54,6 +55,7 @@ form {
 button {
     max-width: 200px;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 img {

@@ -20,9 +20,12 @@
             <label for="image1">Image 2:</label>
             <input type="file" id="image2" name="image2" onchange="previewImage(this,'preview2')" /><br />
             <img id="preview2" src="" style="max-width: 100%; height: auto" />
-            <button type="button" onclick="compareImages()">Compare Images</button>
+            <button type="button" onclick="compareImages()">对比</button>
         </form>
-        <div id="result">You can add two images comparison on the left.</div>
+        <div id="result">
+            <button id="downimg" onclick="downLoad()" style="display:none">下载</button>
+            <div id="out_img">You can add two images comparison on the left.</div>
+        </div>
     </div>
 
     <script>
@@ -74,17 +77,17 @@
                                     }
                                 }
                                 var percent = (diff / (width * height)) * 100;
-                                var result = document.getElementById("result");
+                                var result = document.getElementById("out_img");
                                 if (percent == 0.0) {
                                     result.innerHTML =
-                                        "<div>result:Images are " +
+                                        "<div><p>result:Images are " +
                                         percent.toFixed(2) +
-                                        "% different,They are the same picture!</div>";
+                                        "% different,They are the same picture!</p></div>";
                                 } else {
                                     result.innerHTML =
-                                        "<div>result:Images are " +
+                                        "<div><p>result:Images are " +
                                         percent.toFixed(2) +
-                                        "% different,You need to focus on the differences.</div>";
+                                        "% different,You need to focus on the differences.</p></div>";
                                 }
                                 // Compare the pixel data of the two images
                                 for (let i = 0; i < data.length; i += 4) {
@@ -111,20 +114,32 @@
                                 // Convert the canvas to an image and display it
                                 var diffImg = document.createElement("img");
                                 diffImg.src = canvas.toDataURL();
-                                result.appendChild(diffImg);
+                                diffImg.id = "preview3",
+                                    result.appendChild(diffImg);
+                                document.getElementById("downimg").style.display = "flex";
                             };
                             img2.onerror = function () {
                                 alert("Error loading image 2");
+                                document.getElementById("downimg").style.display = "none";
+
                             };
                         };
                     };
                     img1.onerror = function () {
                         alert("Error loading image 1");
+                        document.getElementById("downimg").style.display = "none";
                     };
                 };
             } else {
                 alert("Please select two images");
             }
+        }
+
+        function downLoad() {
+            var link = document.createElement('a');
+            link.download = 'image.png';
+            link.href = document.getElementById('preview3').src;
+            link.click();
         }
     </script>
 </body>
