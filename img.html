@@ -25,7 +25,7 @@
         </form>
         <div id="result">
             <button id="downimg" onclick="downLoad()" style="display:none">下载</button>
-            <div id="out_img">You can add two images comparison on the left.</div>
+            <div id="out_img">左侧添加两张需要对比的图片，此处展示对比结果。</div>
         </div>
     </div>
 
@@ -81,14 +81,12 @@
                                 var result = document.getElementById("out_img");
                                 if (percent == 0.0) {
                                     result.innerHTML =
-                                        "<div><p>result:Images are " +
-                                        percent.toFixed(2) +
-                                        "% different,They are the same picture!</p></div>";
+                                        "<div><p>图片是一样的，无需对比</p></div>";
                                 } else {
                                     result.innerHTML =
-                                        "<div><p>result:Images are " +
+                                        "<div><p>图片有 " +
                                         percent.toFixed(2) +
-                                        "% different,You need to focus on the differences.</p></div>";
+                                        "% 的不同,需要关注下不同之处。</p></div>";
                                 }
                                 // Compare the pixel data of the two images
                                 for (let i = 0; i < data.length; i += 4) {
@@ -132,7 +130,7 @@
                     };
                 };
             } else {
-                alert("Please select two images");
+                alert("请选择两张图片对比！");
             }
         }
 

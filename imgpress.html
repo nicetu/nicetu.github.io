@@ -29,8 +29,8 @@
 			</div>
 		</form>
 		<div id="result">
-			<button onclick="downLoad()">下载</button>
-			<span id="out_press"></span>
+			<button id="down" onclick="downLoad()" style="display: none;">下载</button>
+			<span id="out_press">左侧添加图片，此处展示压缩后的结果</span>
 			<img id="preview1" src="" style="width: 100%; height: auto" /><br />
 		</div>
 	</div>
@@ -85,6 +85,7 @@
 					document.getElementById("out_press").innerHTML = ratioText + "，压缩后大小: " + ((base64.length * 3 / 4) /
 							1024)
 						.toFixed(2) + "KB";
+					document.getElementById("down").style.display = "flex";
 				}
 
 			}
