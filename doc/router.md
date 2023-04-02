@@ -40,9 +40,7 @@ ps: 学会用npm包管理中心找工具包
 
 - Nextjs（推荐）: https://www.nextjs.cn/
 
-- Create-react-app: https://
-
-- create-react-app.bootcss.com/
+- Create-react-app: https://create-react-app.bootcss.com/
 
 ## 第七步：掌握常用开源组件库：
 
