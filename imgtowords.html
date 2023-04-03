@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FrontGPT</title>
+    <meta name="keywords" content="图片转文字">
+    <meta name="description" content="这是一个用于学习前端开发的网页文档,包含HTML、CSS、JavaScript等内容。">
+    <link rel="stylesheet" type="text/css" href="./css/img.css">
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <!-- <script src='https://unpkg.com/tesseract.js@4.0.2/dist/tesseract.min.js' crossorigin="anonymous"></script> -->
+    <script src='./js/tesseract.min.js'></script>
+
+    <style type="text/css">
+        #preview {
+            width: 200px;
+            height: 200px;
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px solid #1677ff;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <form>
+            <h1>Image <br />ToWords</h1>
+            <div>
+                <input type="file" id="fileInput" onchange="handleFiles()" accept="image/*" />
+            </div>
+            <div>
+                <img id="preview" src="" style="max-width: 100%; height: auto" /><br />
+            </div>
+        </form>
+        <div id="result">
+            <button onclick="copyToClipboard()">复制</button>
+            <textarea id="word" rows="10" placeholder="左侧添加图片,此处为生成的文字的结果"></textarea>
+            <div id="show_box"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function handleFiles() {
+            var fileInput = document.getElementById("fileInput");
+            var preview = document.getElementById("preview");
+            var file = fileInput.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    preview.src = reader.result;
+                    document.getElementById("show_box").innerHTML = "";
+                    document.getElementById("word").innerText = "正在识别中...";
+                    recognize(file);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function recognize(file) {
+            var {
+                data: {
+                    text,
+                    lines
+                }
+            } = await Tesseract.recognize(file, "chi_sim", {
+                langPath: './lang-data',
+                workerPath: "./js/worker.min.js",
+                corePath: "./js/tesseract-core-simd.wasm.js",
+                logger: function (m) {
+                    console.log(m)
+                },
+            });
+            document.getElementById('word').innerText = (text + "").split(" ").join("");
+            for (var index = 0; index < lines.length; index++) {
+                var element = lines[index];
+                var item = document.createElement("div");
+                item.innerHTML = (element.text + "").split(" ").join("");
+                document.getElementById('show_box').appendChild(item)
+            }
+        }
+
+        function copyToClipboard() {
+            var base64 = document.getElementById("word");
+            base64.select();
+            document.execCommand("copy");
+            alert("已复制到剪贴板");
+        }
+    </script>
+</body>
+
+</html>

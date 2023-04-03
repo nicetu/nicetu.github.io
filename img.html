@@ -41,6 +41,7 @@
             }
         }
 
+
         function compareImages() {
             var file1 = document.getElementById("image1").files[0];
             var file2 = document.getElementById("image2").files[0];
@@ -63,9 +64,9 @@
                                 var height = Math.max(img1.height, img2.height);
                                 canvas.width = width;
                                 canvas.height = height;
-                                ctx.drawImage(img1, 0, 0);
+                                ctx.drawImage(img1, 0, 0, width, height);
                                 ctx.globalCompositeOperation = "difference";
-                                ctx.drawImage(img2, 0, 0);
+                                ctx.drawImage(img2, 0, 0, width, height);
                                 var data = ctx.getImageData(0, 0, width, height).data;
                                 var diff = 0;
                                 for (var i = 0; i < data.length; i += 4) {
