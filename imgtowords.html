@@ -67,7 +67,7 @@
             } = await Tesseract.recognize(file, "chi_sim", {
                 langPath: './lang-data',
                 workerPath: "./js/worker.min.js",
-                corePath: "./js/tesseract-core-simd.wasm.js",
+                corePath: "./js/tesseract-core.js",
                 logger: function (m) {
                     console.log(m)
                 },
