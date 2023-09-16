@@ -275,7 +275,7 @@ export function downloadFile(fileName, content) {
  * @param {string} imgUrl - 图片的url地址
  * @returns {Promise<string>} 转换后的base64编码
  */
-async export function imgToBase64(imgUrl) {
+export async function imgToBase64(imgUrl) {
   const response = await fetch(imgUrl);
   const blob = await response.blob();
   return new Promise((resolve, reject) => {
@@ -292,7 +292,7 @@ async export function imgToBase64(imgUrl) {
  * @param {File} file - 本地图片文件
  * @returns {Promise<string>} 转换后的base64编码
  */
-async export function localImgToBase64(file) {
+export async function localImgToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -307,7 +307,7 @@ async export function localImgToBase64(file) {
  * @param {string} data - 需要压缩的数据
  * @returns {Promise<Uint8Array>} 压缩后的数据
  */
-async export function gzipCompress(data) {
+export async function gzipCompress(data) {
   const encoder = new TextEncoder();
   const compressed = await window.pako.gzip(encoder.encode(data));
   return compressed;
@@ -317,7 +317,7 @@ async export function gzipCompress(data) {
  * @param {Uint8Array} compressed - 需要解压的数据
  * @returns {Promise<string>} 解压后的数据
  */
-async export function gzipDecompress(compressed) {
+export async function gzipDecompress(compressed) {
   const decompressed = await window.pako.ungzip(compressed);
   const decoder = new TextDecoder();
   return decoder.decode(decompressed);
@@ -397,7 +397,7 @@ export function validatePassword(password) {
  * @param {string} imgUrl - 图片的url地址
  * @returns {Promise<boolean>} 是否为有效图片格式
  */
-async export function validateImageFormat(imgUrl) {
+export async function validateImageFormat(imgUrl) {
   const response = await fetch(imgUrl);
   const blob = await response.blob();
   const fileReader = new FileReader();
@@ -419,7 +419,7 @@ async export function validateImageFormat(imgUrl) {
  * @param {File} file - 本地文件
  * @returns {Promise<boolean>} 是否为有效图片格式
  */
-async export function validateLocalImageFormat(file) {
+export async function validateLocalImageFormat(file) {
   const fileReader = new FileReader();
   return new Promise((resolve, reject) => {
     fileReader.onloadend = () => {
